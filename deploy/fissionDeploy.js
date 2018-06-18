@@ -8,11 +8,13 @@ class fissionDeploy {
 	this.options = options || {};
 	this.provider = this.serverless.getProvider('fission');
 	}
-	nrc.run('fission env create --name python --image USER/python-env'.then(function(exitCodes) {
-	 
-	}, function(err) {
-	  console.log('Command failed to run with error: ', err);
-	}););
+//	console.log("Hello World");
+	nrc.run('fission env create --name python --image USER/python-env');
+//	nrc.run('fission env create --name python --image USER/python-env'.then(function(exitCodes) {
+//	 
+//	}, function(err) {
+//	  console.log('Command failed to run with error: ', err);
+//	}););
 
 }
 
