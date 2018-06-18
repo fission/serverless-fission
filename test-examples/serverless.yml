@@ -1,0 +1,13 @@
+service: hello
+
+provider:
+  name: fission
+  runtime: python2.7
+
+plugins:
+  - serverless-fission
+
+functions:
+  hello:
+    description: 'Hello function'
+    handler: handler.hello
