@@ -78,5 +78,6 @@ If you are using minikube, you can call the function through HTTP and the Node P
 $ curl  http://$(minikube ip):31314/hello
 hello world
 ```
-
+Demo:
+[![asciicast](https://asciinema.org/a/uhBySeyWY8tvqAIbIlaTmLwSA.png)](https://asciinema.org/a/uhBySeyWY8tvqAIbIlaTmLwSA)
 
