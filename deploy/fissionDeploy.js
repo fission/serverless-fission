@@ -7,9 +7,14 @@ class fissionDeploy {
 	this.serverless = serverless;
 	this.options = options || {};
 	this.provider = this.serverless.getProvider('fission');
+	var errorCallback = function(data) {console.log(data);};
+	var dataCallback=function(data) {console.log(data);};
+	nrc.run('fission env create --name python --image fission/python-env', {onError: errorCallback, onData: dataCallback});
+	nrc.run('fission function create --name hello --env python --code hello.py --url /hello --method GET', { onError: errorCallback, onData: dataCallback });
+	console.log('You can access your function by calling "curl $FISSION_ROUTER/hello" and get its ip address with "echo $FISSION_ROUTER".');                                                                                                        }                          
 	}
 //	console.log("Hello World");
-	nrc.run('fission env create --name python --image USER/python-env');
+//	nrc.run('fission env create --name python --image USER/python-env');
 //	nrc.run('fission env create --name python --image USER/python-env'.then(function(exitCodes) {
 //	 
 //	}, function(err) {
