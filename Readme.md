@@ -6,16 +6,16 @@ This plugin brings [Fission](https://github.com/fission/fission) support within 
 
 ## Pre requisites
 
-Make sure you have a kubernetes endpoint running and fission-cli is installed. You can find the installation intructions [here](https://docs.fission.io/0.8.0/installation/installation/).
+Make sure you have a fission running and fission-cli is installed. You can find the installation intructions [here](https://docs.fission.io/0.8.0/installation/installation/).
 
-Once you have fission running in your cluster you can install serverless
+You can install serverless with npm,
 ```bash
 $ npm install serverless -g
 ```
 
 ## Try out the example
 
-Clone this repo and check the example function
+Clone repo and check the example function
 ```bash
 $ git clone https://github.com/infracloudio/serverless-fission/
 $ cd examples/test-examples
@@ -54,7 +54,7 @@ of all the functions referencing them. Envs can be created in different ns if is
 function 'hello' created
 ```
 
-The function will be deployed to k8s via fission.
+The function will be deployed to Kubernetes via fission.
 ```bash
 $ fission function list
 NAME  UID                                  ENV    EXECUTORTYPE MINSCALE MAXSCALE MINCPU MAXCPU MINMEMORY MAXMEMORY TARGETCPU             
@@ -73,11 +73,9 @@ $ curl $FISSION_ROUTER/hello
 hello world
 ```
 
-
-
-If you are using minikube you can call directly the function through HTTP and the Node Port in which the function is running:
+If you are using minikube, you can call the function through HTTP and the Node Port in which function is running:
 ```bash
-$ curl  http://192.168.99.100:31314
+$ curl  http://$(minikube ip):31314/hello
 hello world
 ```
 
