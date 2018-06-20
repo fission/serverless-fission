@@ -48,7 +48,8 @@ Serverless: Packaging service...
 Serverless: Excluding development dependencies...
 environment 'python' created
 
-1 environment(s) are present in this ns: default. All these envs share the same service account token, with previleges to view secrets of all the functions referencing them. Envs can be created in different ns if isolation is needed   
+1 environment(s) are present in this ns: default. All these envs share the same service account token, with previleges to view secrets 
+of all the functions referencing them. Envs can be created in different ns if isolation is needed   
 
 function 'hello' created
 ```
@@ -56,10 +57,13 @@ function 'hello' created
 The function will be deployed to k8s via fission.
 ```bash
 $ fission function list
-NAME  UID                                  ENV    EXECUTORTYPE MINSCALE MAXSCALE MINCPU MAXCPU MINMEMORY MAXMEMORY TARGETCPU             hello 2b0f9c51-7459-11e8-a089-080027cdd0a9 python poolmgr      0        1        0      0      0         0         80         
+NAME  UID                                  ENV    EXECUTORTYPE MINSCALE MAXSCALE MINCPU MAXCPU MINMEMORY MAXMEMORY TARGETCPU             
+hello 2b0f9c51-7459-11e8-a089-080027cdd0a9 python poolmgr      0        1        0      0      0         0         80         
 $ kubectl get pods --all-namespaces
 NAMESPACE          NAME                                                              READY     STATUS        RESTARTS   AGE   
-fission-function   python-2b073331-7459-11e8-a089-080027cdd0a9-5h3iitxq-66b4c56lrb   2/2       Running       0          15s             fission-function   python-2b073331-7459-11e8-a089-080027cdd0a9-5h3iitxq-66b4c5vzpv   2/2       Running       0          15s              fission-function   python-2b073331-7459-11e8-a089-080027cdd0a9-5h3iitxq-66b4cn8psk   2/2       Running       0          15s  
+fission-function   python-2b073331-7459-11e8-a089-080027cdd0a9-5h3iitxq-66b4c56lrb   2/2       Running       0          15s             
+fission-function   python-2b073331-7459-11e8-a089-080027cdd0a9-5h3iitxq-66b4c5vzpv   2/2       Running       0          15s             
+fission-function   python-2b073331-7459-11e8-a089-080027cdd0a9-5h3iitxq-66b4cn8psk   2/2       Running       0          15s  
 
 ```
 
