@@ -101,21 +101,17 @@ async function create_func(client) {
     console.log('Functions:', fns);
 }
 
-async function create_pkgs(client) {
+async function create_pkgs(client, archive) {
     const pkg = {
         apiVersion: 'fission.io/v1',
         kind: 'Package',
         metadata: {
             clusterName: '',
-            name: 'test-js-yc0q',
+            name: 'test-js-yc0r',
             namespace: 'default'
         },
         spec: {
-            deployment: {
-                type: 'literal',
-                literal: 'Cm1vZHVsZS5leHBvcnRzID0gYXN5bmMgZnVuY3Rpb24oY29udGV4dCkgewogICAgcmV0dXJuIHsKICAgICAgICBzdGF0dXM6IDIwMCwKICAgICAgICBib2R5OiAiSGVsbG8sIHdvcmxkIVxuIgogICAgfTsKfQo=',
-                checksum: {}
-            },
+            deployment: archive,
             environment: {
                 name: 'node',
                 namespace: 'default'
@@ -125,6 +121,7 @@ async function create_pkgs(client) {
             }
         }
     }
+    console.log(pkg)
     const pkgs = await client.apis['fission.io'].v1.namespaces('default').packages.post({ body: pkg});
     console.log('Packages:', pkgs);
 }
@@ -151,19 +148,17 @@ async function main() {
         item = all['body']['items'][i]
         client.addCustomResourceDefinition(item);
     }
-    /*
     const filename = 'hello.js';
     // if http or https download to temp dir
     const filePath = path.join(__dirname, filename);
     get_contents(filePath, function(data) {
         const archive = {
             type: 'literal',
-            literal: 'Cm1vZHVsZS5leHBvcnRzID0gYXN5bmMgZnVuY3Rpb24oY29udGV4dCkgewogICAgcmV0dXJuIHsKICAgICAgICBzdGF0dXM6IDIwMCwKICAgICAgICBib2R5OiAiSGVsbG8sIHdvcmxkIVxuIgogICAgfTsKfQo=',
+            literal: Buffer(data).toString('base64'),
             checksum: {}
         }
         create_pkgs(client, archive);
-    });*/
-    create_pkgs(client);
+    });
 
    // create_func(client);
     log_resource(list_pkgs(client));
