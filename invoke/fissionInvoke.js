@@ -34,5 +34,5 @@ class fissionInvoke {
 	nrc.run('curl $FISSION_ROUTER/hello', { onError: errorCallback, onData: dataCallback });
 	console.log('You can access your function by calling "curl $FISSION_ROUTER/hello" and get its ip address with "echo $FISSION_ROUTER".');
 }
-
+}
 module.exports = fissionInvoke;

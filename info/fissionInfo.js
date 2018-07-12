@@ -34,5 +34,5 @@ class fissionInfo {
 	nrc.run('fission function logs --name hello', {onError: errorCallback, onData: dataCallback});
 
 }
-
+}
 module.exports = fissionInfo;
