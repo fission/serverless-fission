@@ -1,0 +1,16 @@
+{
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "plugins": [
+     "import",
+     "async"
+  ],
+  "settings": {
+    "import/parser": "eslint"
+  },
+  "parserOptions": {
+    "ecmaVersion": 2017
+  }
+}
