@@ -23,7 +23,7 @@ class fissionRollback {
 		'rollback:rollback': () => Bbpromise.bind(this).then(this.rollback)
 	}
 	}
-	rollback {	
+	rollback() {	
 	var errorCallback = function(data) {
 		  console.log(data);
 	};

@@ -24,7 +24,7 @@ class fissionPrint {
 	}
 	}
 		
-	print {
+	print() {
 	var errorCallback = function(data) {
 		  console.log(data);
 	};

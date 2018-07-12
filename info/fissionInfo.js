@@ -24,7 +24,7 @@ class fissionInfo {
 	}
 	
 	}
-	info {
+	info() {
 	var errorCallback = function(data) {
 		  console.log(data);
 	};

@@ -48,7 +48,7 @@ async function create_env(client) {
         apiVersion: 'fission.io/v1',
         kind: 'Environment',
         metadata: {
-            name: 'node',
+            name: 'node-1',
             namespace: 'default',
         },
         spec: {
@@ -67,10 +67,11 @@ async function create_env(client) {
         }
     }
     const envs = await client.apis['fission.io'].v1.namespaces('default').environments.post({body: env});
-    console.log('Environments:', envs);
+   // console.log('Environments:', envs);
+    return envs;
 }
 
-async function create_func(client) {
+async function create_func(client,env_name,pkg_name) {
     var objs = await list_pkgs(client);
     const fn = {
         apiVersion: 'fission.io/v1',
@@ -126,9 +127,10 @@ async function create_pkgs(client, archive) {
             }
         }
     }
-    console.log(pkg)
+  //  console.log(pkg)
     const pkgs = await client.apis['fission.io'].v1.namespaces('default').packages.post({ body: pkg});
-    console.log('Packages:', pkgs);
+//    console.log('Packages:', pkgs);
+    return pkgs;
 }
 
 function get_contents(filePath, cb) {
@@ -147,6 +149,7 @@ async function main() {
     //
     // Create the CRD with the Kubernetes API
     //
+    console.log("test1");
     const all = await client.apis['apiextensions.k8s.io'].v1beta1.customresourcedefinitions.get();
 
     for (var i in all['body']['items']) {
@@ -156,18 +159,22 @@ async function main() {
     const filename = 'hello.js';
     // if http or https download to temp dir
     const filePath = path.join(__dirname, filename);
-    get_contents(filePath, function(data) {
+    console.log("test2");
+    get_contents(filePath, async function(data) {
+	console.log("test3");
         const archive = {
             type: 'literal',
             literal: Buffer(data).toString('base64'),
             checksum: {}
         }
-        //create_pkgs(client, archive);
+	var env_name = await create_env(client);
+        var pkg_name = await create_pkgs(client, archive);
+	console.log(env_name[0].metadata);
     });
 
    // create_func(client);
-    var objs = await list_pkgs(client);
-    console.log(objs[1].metadata.resourceVersion);
+   // var objs = await list_pkgs(client);
+   // console.log(objs[1].metadata.resourceVersion);
    // log_resource(list_pkgs(client));
   } catch (err) {
     console.error('Error: ', err);

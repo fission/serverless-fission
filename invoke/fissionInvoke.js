@@ -24,7 +24,7 @@ class fissionInvoke {
 	}
 	}
 
-	invoke {
+	invoke() {
 	var errorCallback = function(data) {
 		  console.log(data);
 	};
