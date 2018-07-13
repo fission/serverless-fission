@@ -24,7 +24,13 @@ class fissionplugin {
   constructor(serverless, options) {
     this.serverless = serverless;
     this.options = options;
-
+    /*this.commands = {
+      deploy: {
+        lifecycleEvents: [
+          'functions'
+        ],
+      },
+    }*/
    this.serverless.pluginManager.addPlugin(fissionProvider);
    this.serverless.pluginManager.addPlugin(fissionDeploy);
    this.serverless.pluginManager.addPlugin(fissionCreate);

@@ -13,7 +13,10 @@
 'use strict';
 const Bbpromise = require('bluebird');
 var nrc = require('node-run-cmd');
-
+var fs = require('fs');
+path = require('path');
+const Client = require('kubernetes-client').Client;
+const config = require('kubernetes-client').config;
 class fissionInfo {
 	constructor(serverless,options) {
 	this.serverless = serverless;

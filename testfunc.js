@@ -2,6 +2,7 @@
 //
 // Use a Custom Resource Definition to extend the Kubernetes API and the client.
 //
+var exports = module.exports = {};
 var fs = require('fs');
     path = require('path');
 const Client = require('kubernetes-client').Client;
@@ -15,7 +16,7 @@ async function log_resource(resource) {
         item = resources[i]
         console.log(item);
     }
-}
+};
 
 async function list_fns(client) {
     const fns = await client.apis['fission.io'].v1.namespaces('default').functions.get();
@@ -44,7 +45,7 @@ async function get_env(client) {
 async function delete_env(client) {
 }
 
-async function create_env(client,env_name) {
+ exports.create_env = async function (client,env_name) {
     const env = {
         apiVersion: 'fission.io/v1',
         kind: 'Environment',
@@ -68,8 +69,8 @@ async function create_env(client,env_name) {
         }
     }
     const envs = await client.apis['fission.io'].v1.namespaces('default').environments.post({body: env});
-   // console.log('Environments:', envs);
-    return envs;
+    console.log('Environments:', envs);
+   // return envs;
 }
 
 async function create_func(client,funcname,env_name,pkg_name) {
@@ -128,9 +129,7 @@ async function create_pkgs(client, archive) {
             }
         }
     }
-  //  console.log(pkg)
     const pkgs = await client.apis['fission.io'].v1.namespaces('default').packages.post({ body: pkg});
-//    console.log('Packages:', pkgs);
     return pkgs;
 }
 
@@ -158,29 +157,3 @@ async function create_func_pkg(client,env_name,code,name) {
         create_func(client,name, env_name, pkg_name['body']);
     });
 }
-async function main() {
-  try {
-    const client = new Client({ config: config.fromKubeconfig(), version: '1.9' });
-
-    //
-    // Create the CRD with the Kubernetes API
-    //
-    console.log("test1");
-    const all = await client.apis['apiextensions.k8s.io'].v1beta1.customresourcedefinitions.get();
-
-    for (var i in all['body']['items']) {
-        item = all['body']['items'][i]
-        client.addCustomResourceDefinition(item);
-    }
-    create_func_pkg();
-
-   // create_func(client);
-   // var objs = await list_pkgs(client);
-   // console.log(objs[1].metadata.resourceVersion);
-   // log_resource(list_pkgs(client));
-  } catch (err) {
-    console.error('Error: ', err);
-  }
-}
-
-main();
