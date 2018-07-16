@@ -13,5 +13,8 @@
   "parserOptions": {
     "ecmaVersion": 2017
   },
+  "rules": {
+    "no-console": "off"
+  },
   "extends": "eslint:recommended"
 }

@@ -32,6 +32,16 @@ class fissionInvoke {
 						usage: 'Specify the file containing the function to deploy. (e.g. "--code index.js")',
 						shortcut: 'p',
 						default: '8443'
+					},
+					fnname: {
+						usage: 'Specify the file containing the function to deploy. (e.g. "--code index.js")',
+						shortcut: 'f',
+						default: '8443'
+					},
+					namespace: {
+						usage: 'Specify the file containing the function to deploy. (e.g. "--code index.js")',
+						shortcut: 'nmspc',
+						default: '8443'
 					}
 				}
 			},
@@ -45,7 +55,7 @@ class fissionInvoke {
 		var options = {
 			host: this.options.router,
 			port: this.options.ports,
-			path: '/hello'
+			path: this.options.fnname
 		};
 
 		http.get(options, function (res) {
