@@ -4,19 +4,19 @@
 //
 var exports = module.exports = {};
 var fs = require('fs');
-    path = require('path');
-const Client = require('kubernetes-client').Client;
-const config = require('kubernetes-client').config;
-var env_name;
-var pkg_name;
-
+//var path = require('path');
+//const Client = require('kubernetes-client').Client;
+//const config = require('kubernetes-client').config;
+//var env_name;
+//var pkg_name;
+var item;
 async function log_resource(resource) {
     var resources = await resource
     for (var i in resources) {
         item = resources[i]
         console.log(item);
     }
-};
+}
 
 async function list_fns(client) {
     const fns = await client.apis['fission.io'].v1.namespaces('default').functions.get();
@@ -141,7 +141,7 @@ function get_contents(filePath, cb) {
         cb(data);
     });
 }
-async function create_func_pkg(client,env_name,code,name) {
+exports.create_func_pkg = async function (client,env_name,code,name) {
     const filename = code;
     // if http or https download to temp dir
     const filePath = path.join(__dirname, filename);
