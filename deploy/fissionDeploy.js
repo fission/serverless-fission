@@ -12,11 +12,9 @@
 */
 'use strict';
 
-var nrc = require('node-run-cmd');
-var fs = require('fs');
 const Client = require('kubernetes-client').Client;
 const config = require('kubernetes-client').config;
-var func = require('../testfunc.js');
+var func = require('../common.js');
 class fissionDeploy {
 	constructor(serverless,options) {
 	this.serverless = serverless;
@@ -25,37 +23,33 @@ class fissionDeploy {
 		this.commands = {
 			deploy: {
 				lifecycleEvents: [
-					'deploy'
+					'functions'
 				],
 				options: {
-					env: {
+					template: {
 						usage: 'Specify the environment you want to deploy in (e.g. "--env python")',
-						shortcut: 'env',
+						shortcut: 'fn',
 						required: true
 					},
-					code: {
+					stage: {
 						usage: 'Specify the file containing the function to deploy. (e.g. "--code index.js")',
 						shortcut: 's',
-						required: true
-					},
-					name: {
-						usage: 'Specify the function name. (e.g. "--name test")',
-						shortcut: 'name',
-						required: true
+						default: 'dev'
 					}
 				}
 			},
 		};
-	this.hooks = {
-	'deploy:deploy': () => Bbpromise.bind(this).then(this.deploy),
-	};
+		this.hooks = {
+			'deploy:functions': this.deployFunction.bind(this)
+		};
 }
-	deploy() {
+	async deployFunction() {
 		var env_name = this.options.env;
 		var code = this.options.code;
+        var name = this.options.name;
 		const client = new Client({ config: config.fromKubeconfig(), version: '1.9' });
 		func.create_func_pkg(client,name,env_name,code);
-	console.log('You can access your function by calling "curl $FISSION_ROUTER/hello" and get its ip address with "echo $FISSION_ROUTER".');
+
 	}
 }
 

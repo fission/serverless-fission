@@ -12,11 +12,8 @@
 */
 'use strict';
 
-const Bbpromise = require('bluebird');
-var nrc = require('node-run-cmd');
-var fs = require('fs');
 const Client = require('kubernetes-client').Client;
-var testFunc = require("../testfunc.js");
+var testFunc = require("../common.js");
 const config = require('kubernetes-client').config;
 const client = new Client({ config: config.fromKubeconfig(), version: '1.9' });
 class fissionCreate {
@@ -30,7 +27,7 @@ class fissionCreate {
 					'functions'
 				],
 				options: {
-				    template: {
+					template: {
 						usage: 'Specify the environment you want to deploy in (e.g. "--env python")',
 						shortcut: 'env',
 						required: true
@@ -46,7 +43,6 @@ class fissionCreate {
 	this.hooks = {
 		'create:functions': this.createFunction.bind(this)
 	};
-        console.log('test3');
 }
 	
 async createFunction() {
@@ -56,11 +52,7 @@ async createFunction() {
                     var item = all['body']['items'][i]
                     client.addCustomResourceDefinition(item);
                 }
-    console.log('test1');
 	var env_name = this.options.template;
-	var code = this.options.stage;
-	console.log('test2');
-    console.log(env_name);
     testFunc.create_env(client,env_name);
 	}
 }

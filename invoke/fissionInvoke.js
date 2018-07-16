@@ -11,31 +11,48 @@
  limitations under the License.
 */
 'use strict';
-const Bbpromise = require('bluebird');
-var nrc = require('node-run-cmd');
-var fs = require('fs');
-path = require('path');
-const Client = require('kubernetes-client').Client;
-const config = require('kubernetes-client').config;
+var http = require('http');
 class fissionInvoke {
 	constructor(serverless,options) {
 	this.serverless = serverless;
 	this.options = options || {};
 	this.provider = this.serverless.getProvider('fission');
-	this.hooks = {
-		'invoke:invoke': () => Bbpromise.bind(this).then(this.invoke),
-	};
+		this.commands = {
+			invoke: {
+				lifecycleEvents: [
+					'functions'
+				],
+				options: {
+					router: {
+						usage: 'Specify the environment you want to deploy in (e.g. "--env python")',
+						shortcut: 'ip',
+						required: true
+					},
+					ports: {
+						usage: 'Specify the file containing the function to deploy. (e.g. "--code index.js")',
+						shortcut: 'p',
+						default: '8443'
+					}
+				}
+			},
+		};
+		this.hooks = {
+			'invoke:functions': this.invokeFunction.bind(this)
+		};
 	}
 
-	invoke() {
-	var errorCallback = function(data) {
-		  console.log(data);
-	};
-	var dataCallback=function(data) {
-		console.log(data);
-	};
-	nrc.run('curl $FISSION_ROUTER/hello', { onError: errorCallback, onData: dataCallback });
-	console.log('You can access your function by calling "curl $FISSION_ROUTER/hello" and get its ip address with "echo $FISSION_ROUTER".');
+	invokeFunction() {
+		var options = {
+			host: this.options.router,
+			port: this.options.ports,
+			path: '/hello'
+		};
+
+		http.get(options, function (res) {
+			console.log("Got response: " + res.statusCode);
+		}).on('error', function (e) {
+			console.log("Got error: " + e.message);
+		});
 }
 }
 module.exports = fissionInvoke;
