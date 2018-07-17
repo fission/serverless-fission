@@ -13,7 +13,7 @@
 'use strict';
 
 const Client = require('kubernetes-client').Client;
-var testFunc = require("../common.js");
+var env_create = require("../common.js");
 const config = require('kubernetes-client').config;
 const client = new Client({ config: config.fromKubeconfig(), version: '1.9' });
 class fissionCreate {
@@ -32,9 +32,14 @@ class fissionCreate {
 						shortcut: 'env',
 						required: true
 					},
-					stage: {
+					img: {
+						usage: 'Specify the environment you want to deploy in (e.g. "--env python")',
+						shortcut: 'img',
+						required: true
+					},
+					nmspace: {
 						usage: 'Specify the file containing the function to deploy. (e.g. "--code index.js")',
-						shortcut: 's',
+						shortcut: 'nm',
 						default: 'dev'
 					}
 				}
@@ -53,7 +58,9 @@ async createFunction() {
                     client.addCustomResourceDefinition(item);
                 }
 	var env_name = this.options.template;
-    testFunc.create_env(client,env_name);
+	var nmspace = this.options.nmspace;
+	var img = this.options.img;
+    env_create.create_env(client,env_name,nmspace,img);
 	}
 }
 

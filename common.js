@@ -7,15 +7,25 @@ var fs = require('fs');
 
 var path = require('path');
 
+exports.delete_env = async function (client, env_name, nmspace) {
+    
+    var del_env = await client.apis['fission.io'].v1.namespaces(nmspace).environments(env_name).delete();
+    console.log(del_env);
+}
+exports.delete_fn = async function (client, fn_name, nmspace) {
+
+    var del_fn = await client.apis['fission.io'].v1.namespaces(nmspace).functions(fn_name).delete();
+    console.log(del_fn);
+}
 
 
- exports.create_env = async function (client,env_name) {
+ exports.create_env = async function (client,env_name,nmspace,img) {
     const env = {
         apiVersion: 'fission.io/v1',
         kind: 'Environment',
         metadata: {
             name: env_name,
-            namespace: 'default',
+            namespace: nmspace,
         },
         spec: {
             TerminationGracePeriod: 360,
@@ -25,7 +35,7 @@ var path = require('path');
             resources: {},
             runtime: {
                 functionendpointport: 0,
-                image: 'fission/node-env:0.4.0',
+                image: img,
                 loadendpointpath: '',
                 loadendpointport: 0
             },

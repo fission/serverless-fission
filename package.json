@@ -13,17 +13,20 @@
   "author": "info@infracloud.io",
   "license": "Apache-2.0",
   "dependencies": {
+    "7": "0.0.1",
     "bluebird": "^3.5.0",
     "chalk": "^2.0.1",
+    "install": "^0.12.1",
     "js-yaml": "^3.9.0",
     "jszip": "^3.1.3",
+    "lint": "^1.1.2",
     "lodash": "^4.17.4",
     "moment": "^2.18.1"
   },
   "devDependencies": {
     "chai": "^4.0.2",
     "chai-as-promised": "^7.1.0",
-    "eslint": "^3.3.1",
+    "eslint": "^3.19.0",
     "eslint-config-airbnb": "^10.0.1",
     "eslint-config-airbnb-base": "^5.0.2",
     "eslint-config-standard": "^11.0.0",

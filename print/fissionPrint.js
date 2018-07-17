@@ -11,30 +11,46 @@
  limitations under the License.
 */
 'use strict';
-const Bbpromise = require('bluebird');
-var nrc = require('node-run-cmd');
 //var fs = require('fs');
 //path = require('path');
-//const Client = require('kubernetes-client').Client;
-//const config = require('kubernetes-client').config;
+const Client = require('kubernetes-client').Client;
+const config = require('kubernetes-client').config;
+const client = new Client({ config: config.fromKubeconfig(), version: '1.9' });
 class fissionPrint {
 	constructor(serverless,options) {
 	this.serverless = serverless;
 	this.options = options || {};
 	this.provider = this.serverless.getProvider('fission');
+		this.commands = {
+			print: {
+				lifecycleEvents: [
+					'functions'
+				],
+				options: {
+					fn: {
+						usage: 'Specify the environment you want to deploy in (e.g. "--env python")',
+						shortcut: 'fn',
+						required: true
+					},
+					nmspace: {
+						usage: 'Specify the environment you want to deploy in (e.g. "--env python")',
+						shortcut: 'nmspace',
+						required: true
+					}
+				}
+			},
+		};
 	this.hooks = {
-		'print:print': () => Bbpromise.bind(this).then(this.print),
+		'print:functions': () => this.printFunction.bind.this(),
 	}
 	}
 		
-	print() {
-	var errorCallback = function(data) {
-		console.log(data);
-	};
-	var dataCallback=function(data) {
-		console.log(data);
-	};
-	nrc.run('fission function get --name hello', {onError: errorCallback, onData: dataCallback});
+	async printFunction() {
+		var nmspace = this.options.nmspace;
+		var fn_name = this.options.fn;
+		var fn_spec = await client.apis['fission.io'].v1.namespaces(nmspace).functions(fn_name).get();
+		var pkg_
+
 	}
 }
 module.exports = fissionPrint;

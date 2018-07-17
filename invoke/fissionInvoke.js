@@ -59,7 +59,7 @@ class fissionInvoke {
 		};
 
 		http.get(options, function (res) {
-			console.log("Got response: " + res.statusCode);
+			console.log("Got response: " + res);
 		}).on('error', function (e) {
 			console.log("Got error: " + e.message);
 		});
