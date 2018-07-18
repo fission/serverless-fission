@@ -31,7 +31,12 @@ class fissionDeploy {
 						shortcut: 'fn',
 						required: true
 					},
-					stage: {
+					env: {
+						usage: 'Specify the environment you want to deploy in (e.g. "--env python")',
+						shortcut: 'fn',
+						required: true
+					},
+					code: {
 						usage: 'Specify the file containing the function to deploy. (e.g. "--code index.js")',
 						shortcut: 's',
 						default: 'dev'
