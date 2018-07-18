@@ -125,7 +125,7 @@ function get_contents(filePath, cb) {
         cb(data);
     });
 }
-exports.create_func_pkg = async function (client,env_name,code,name) {
+exports.create_func_pkg = async function (client,name,env_name,code) {
     const filename = code;
     // if http or https download to temp dir
     var parentDir = path.resolve(process.cwd(), '../..');
