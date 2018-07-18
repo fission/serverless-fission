@@ -10,12 +10,11 @@ var path = require('path');
 exports.delete_env = async function (client, env_name, nmspace) {
     
     var del_env = await client.apis['fission.io'].v1.namespaces(nmspace).environments(env_name).delete();
-    console.log(del_env);
+    console.log("Fission envirnment ",del_env['body']['details']['name']," deleted");
 }
 exports.delete_fn = async function (client, fn_name, nmspace) {
-
     var del_fn = await client.apis['fission.io'].v1.namespaces(nmspace).functions(fn_name).delete();
-    console.log(del_fn);
+    console.log("Fission function ",del_fn['body']['details']['name']," deleted");
 }
 exports.fn_code = async function (client, fn_name, nmspace) {
 
@@ -27,7 +26,10 @@ exports.fn_code = async function (client, fn_name, nmspace) {
     var pkg_decode = new Buffer(pkg_code, 'base64');
     console.log(pkg_decode.toString());
 }
-
+exports.fn_info = async function (client, fn_name, nmspace) {
+    var fn_info = await client.apis['fission.io'].v1.namespaces(nmspace).functions(fn_name).getStream();
+    console.log(fn_info);
+}
 
  exports.create_env = async function (client,env_name,nmspace,img) {
     const env = {
@@ -53,8 +55,7 @@ exports.fn_code = async function (client, fn_name, nmspace) {
         }
     }
     const envs = await client.apis['fission.io'].v1.namespaces('default').environments.post({body: env});
-    console.log('Environments:', envs);
-   // return envs;
+    console.log("Fission environment ",envs['body']['metadata']['name']," created");
 }
 
 async function create_func(client,funcname,env_name,pkg_name) {
@@ -90,7 +91,7 @@ async function create_func(client,funcname,env_name,pkg_name) {
         }
     }
     const fns = await client.apis['fission.io'].v1.namespaces('default').functions.post({body: fn});
-    console.log('Functions:', fns);
+    console.log("Fission function ", fns['body']['metadata']['name'], " created");
 }
 
 async function create_pkgs(client, archive) {
@@ -125,14 +126,12 @@ function get_contents(filePath, cb) {
         cb(data);
     });
 }
-exports.create_func_pkg = async function (client,env_name,code,name) {
+exports.create_func_pkg = async function (client,name,env_name,code) {
     const filename = code;
     // if http or https download to temp dir
-    var parentDir = path.resolve(process.cwd(), '../..');
+    var parentDir = path.resolve(process.cwd(), '.');
     const filePath = path.join(parentDir, filename);
-    console.log("test2");
     get_contents(filePath, async function (data) {
-        console.log("test3");
         const archive = {
             type: 'literal',
             literal: Buffer(data).toString('base64'),

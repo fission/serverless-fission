@@ -27,12 +27,12 @@ class fissionPrint {
 				],
 				options: {
 					fn: {
-						usage: 'Specify the environment you want to deploy in (e.g. "--env python")',
+						usage: 'Specify the function name (e.g. "--fn hello_world")',
 						shortcut: 'fn',
 						required: true
 					},
 					nmspace: {
-						usage: 'Specify the environment you want to deploy in (e.g. "--env python")',
+						usage: 'Specify the namespace the function is deployed in (e.g. "--nmspace default")',
 						shortcut: 'nmspace',
 						required: true
 					}
@@ -40,11 +40,17 @@ class fissionPrint {
 			},
 		};
 	this.hooks = {
-		'print:functions': () => this.printFunction.bind.this(),
+		'print:functions': this.printFunction.bind(this)
 	}
 	}
 		
 	async printFunction() {
+        const all = await client.apis['apiextensions.k8s.io'].v1beta1.customresourcedefinitions.get();
+
+                for (var i in all['body']['items']) {
+                    var item = all['body']['items'][i]
+                    client.addCustomResourceDefinition(item);
+                }
 		var nmspace = this.options.nmspace;
 		var fn_name = this.options.fn;
 		func.fn_code(client,fn_name,nmspace);

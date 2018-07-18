@@ -28,17 +28,17 @@ class fissionCreate {
 				],
 				options: {
 					template: {
-						usage: 'Specify the environment you want to deploy in (e.g. "--env python")',
+						usage: 'Specify the environment name (e.g. "--template python")',
 						shortcut: 'env',
 						required: true
 					},
 					img: {
-						usage: 'Specify the environment you want to deploy in (e.g. "--env python")',
+						usage: 'Specify the environment you want to deploy in (e.g. "--img python")',
 						shortcut: 'img',
 						required: true
 					},
 					nmspace: {
-						usage: 'Specify the file containing the function to deploy. (e.g. "--code index.js")',
+						usage: 'Specify the namspace in which you want to deploy the environment. (e.g. "--nmspace default")',
 						shortcut: 'nm',
 						default: 'dev'
 					}

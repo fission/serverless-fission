@@ -11,28 +11,49 @@
  limitations under the License.
 */
 'use strict';
-const Bbpromise = require('bluebird');
-const nrc = require('node-run-cmd');
-//const Client = require('kubernetes-client').Client;
-//const config = require('kubernetes-client').config;
+const Client = require('kubernetes-client').Client;
+const config = require('kubernetes-client').config;
+const client = new Client({ config: config.fromKubeconfig(), version: '1.9' });
+var func = require('../common.js');
 class fissionInfo {
 	constructor(serverless,options) {
 	this.serverless = serverless;
 	this.options = options || {};
 	this.provider = this.serverless.getProvider('fission');
+		this.commands = {
+			info: {
+				lifecycleEvents: [
+					'functions'
+				],
+				options: {
+					fn: {
+						usage: 'Specify the function name (e.g. "--fn hello_world")',
+						shortcut: 'fn',
+						required: true
+					},
+					nmspace: {
+						usage: 'Specify the namespace the function is deployed in (e.g. "--nmspace default")',
+						shortcut: 'nmspace',
+						required: true
+					}
+				}
+			},
+		};
 	this.hooks = {
-	'info:info': () => Bbpromise.bind(this).then(this.info)
+	'info:functions': this.infoFunction.bind(this)
 	}
 	
 	}
-	info() {
-	var errorCallback = function(data) {
-		console.log(data);
-	};
-	var dataCallback=function(data) {
-		console.log(data);
-	};
-	nrc.run('fission function logs --name hello', {onError: errorCallback, onData: dataCallback});
+	async info() {
+		const all = await client.apis['apiextensions.k8s.io'].v1beta1.customresourcedefinitions.get();
+
+		for (var i in all['body']['items']) {
+			var item = all['body']['items'][i]
+			client.addCustomResourceDefinition(item);
+		}
+		var nmspace = this.options.nmspace;
+		var fn_name = this.options.fn;
+		func.fn_info(client, fn_name, nmspace);
 
 }
 }

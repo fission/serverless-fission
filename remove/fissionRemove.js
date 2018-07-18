@@ -27,12 +27,12 @@ class fissionRemove {
                 ],
                 options: {
                     fn: {
-                        usage: 'Specify the environment you want to deploy in (e.g. "--env python")',
+                        usage: 'Specify the name of the function to be deleted (e.g. "--name hello_world")',
                         shortcut: 'env',
                         required: true
                     },
                     nmspace: {
-                        usage: 'Specify the file containing the function to deploy. (e.g. "--code index.js")',
+                        usage: 'Specify the namespace where the function is deployed. (e.g. "--nmspace default")',
                         shortcut: 'nm',
                         default: 'dev'
                     }
@@ -43,7 +43,13 @@ class fissionRemove {
             'remove:functions': this.removeFunction.bind(this)
         };
     }
-    removeFunction() {
+   async removeFunction() {
+        const all = await client.apis['apiextensions.k8s.io'].v1beta1.customresourcedefinitions.get();
+
+                for (var i in all['body']['items']) {
+                    var item = all['body']['items'][i]
+                    client.addCustomResourceDefinition(item);
+                }
         var fn_name = this.options.fn;
         var nmspace = this.options.nmspace;
         func.delete_fn(client, fn_name, nmspace);

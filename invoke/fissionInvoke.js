@@ -24,25 +24,21 @@ class fissionInvoke {
 				],
 				options: {
 					router: {
-						usage: 'Specify the environment you want to deploy in (e.g. "--env python")',
+						usage: 'Specify the router ip (e.g. "--router $FISSION_ROUTER")',
 						shortcut: 'ip',
 						required: true
 					},
 					ports: {
-						usage: 'Specify the file containing the function to deploy. (e.g. "--code index.js")',
+						usage: 'Specify the exposed port number. (e.g. "--ports 31314")',
 						shortcut: 'p',
 						default: '8443'
 					},
 					fnname: {
-						usage: 'Specify the file containing the function to deploy. (e.g. "--code index.js")',
+						usage: 'Specify the name of the function you wanna call. (e.g. "--fnname hello_world")',
 						shortcut: 'f',
 						default: '8443'
-					},
-					namespace: {
-						usage: 'Specify the file containing the function to deploy. (e.g. "--code index.js")',
-						shortcut: 'nmspc',
-						default: '8443'
 					}
+					
 				}
 			},
 		};

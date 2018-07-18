@@ -27,12 +27,12 @@ class fissionRollback {
 				],
 				options: {
 					env: {
-						usage: 'Specify the environment you want to deploy in (e.g. "--env python")',
+						usage: 'Specify the environment you want to delete (e.g. "--env python")',
 						shortcut: 'env',
 						required: true
 					},
 					nmspace: {
-						usage: 'Specify the file containing the function to deploy. (e.g. "--code index.js")',
+						usage: 'Specify the namespace where the environment is deployed (e.g. "--nmspace default")',
 						shortcut: 'nm',
 						default: 'dev'
 					}
@@ -43,7 +43,13 @@ class fissionRollback {
 		'rollback:functions': this.rollbackFunction.bind(this)
 	};
 	}
-	rollbackFunction() {	
+	async rollbackFunction() {
+         const all = await client.apis['apiextensions.k8s.io'].v1beta1.customresourcedefinitions.get();
+
+                for (var i in all['body']['items']) {
+                    var item = all['body']['items'][i]
+                     client.addCustomResourceDefinition(item);
+                }
 	var env_name = this.options.env;
 	var nmspace = this.options.nmspace;
 	func.delete_env(client,env_name,nmspace);
