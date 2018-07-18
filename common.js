@@ -4,7 +4,6 @@
 //
 var exports = module.exports = {};
 var fs = require('fs');
-var exec = require('child_process').exec;
 var path = require('path');
 
 exports.delete_env = async function (client, env_name, nmspace) {

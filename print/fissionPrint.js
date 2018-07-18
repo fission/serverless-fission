@@ -53,7 +53,7 @@ class fissionPrint {
                 }
 		var nmspace = this.options.nmspace;
 		var fn_name = this.options.fn;
-		var code = func.fn_code(client,fn_name,nmspace);
+		func.fn_code(client,fn_name,nmspace);
 
 	}
 }
