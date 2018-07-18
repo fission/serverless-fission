@@ -40,7 +40,7 @@ class fissionPrint {
 			},
 		};
 	this.hooks = {
-		'print:functions': () => this.printFunction.bind.this(),
+		'print:functions': () => this.printFunction.bind(this),
 	}
 	}
 		
