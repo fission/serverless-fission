@@ -47,7 +47,7 @@ class fissionPrint {
 	async printFunction() {
 		var nmspace = this.options.nmspace;
 		var fn_name = this.options.fn;
-		func.fn_code(client,fn_name,nmspace);
+		var code = func.fn_code(client,fn_name,nmspace);
 
 	}
 }
