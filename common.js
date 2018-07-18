@@ -17,6 +17,16 @@ exports.delete_fn = async function (client, fn_name, nmspace) {
     var del_fn = await client.apis['fission.io'].v1.namespaces(nmspace).functions(fn_name).delete();
     console.log(del_fn);
 }
+exports.fn_code = async function (client, fn_name, nmspace) {
+
+    var fn_data = await client.apis['fission.io'].v1.namespaces(nmspace).functions(fn_name).get();
+    var pkg_name = fn_data['body']['spec']['package']['packageref']['name'];
+    var pkg_namespace = fn_data['body']['spec']['package']['packageref']['namespace'];
+    var pkg_data = await client.apis['fission.io'].v1.namespaces(pkg_namespace).packages(pkg_name).get();
+    var pkg_code = pkg_data['body']['spec']['deployment']['literal'];
+    var pkg_decode = new Buffer(pkg_code, 'base64');
+    console.log(pkg_decode.toString());
+}
 
 
  exports.create_env = async function (client,env_name,nmspace,img) {

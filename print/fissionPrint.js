@@ -16,6 +16,7 @@
 const Client = require('kubernetes-client').Client;
 const config = require('kubernetes-client').config;
 const client = new Client({ config: config.fromKubeconfig(), version: '1.9' });
+var func = require('../common.js');
 class fissionPrint {
 	constructor(serverless,options) {
 	this.serverless = serverless;
@@ -48,8 +49,7 @@ class fissionPrint {
 	async printFunction() {
 		var nmspace = this.options.nmspace;
 		var fn_name = this.options.fn;
-		var fn_spec = await client.apis['fission.io'].v1.namespaces(nmspace).functions(fn_name).get();
-		var pkg_
+		func.fn_code(client,fn_name,nmspace);
 
 	}
 }
