@@ -4,7 +4,7 @@
 //
 var exports = module.exports = {};
 var fs = require('fs');
-
+var exec = require('child_process').exec;
 var path = require('path');
 
 exports.delete_env = async function (client, env_name, nmspace) {
@@ -128,7 +128,8 @@ function get_contents(filePath, cb) {
 exports.create_func_pkg = async function (client,env_name,code,name) {
     const filename = code;
     // if http or https download to temp dir
-    const filePath = path.join(__dirname, filename);
+    var parentDir = path.resolve(process.cwd(), '../..');
+    const filePath = path.join(parentDir, filename);
     console.log("test2");
     get_contents(filePath, async function (data) {
         console.log("test3");
