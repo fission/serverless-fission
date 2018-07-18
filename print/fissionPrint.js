@@ -11,8 +11,6 @@
  limitations under the License.
 */
 'use strict';
-//var fs = require('fs');
-//path = require('path');
 const Client = require('kubernetes-client').Client;
 const config = require('kubernetes-client').config;
 const client = new Client({ config: config.fromKubeconfig(), version: '1.9' });
