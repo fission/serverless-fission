@@ -56,9 +56,9 @@ class fissionDeploy {
                     let item = all['body']['items'][i]
                     client.addCustomResourceDefinition(item);
                 }
-		let env_name = this.options.env;
-		let code = this.options.code;
-        	let name = this.options.template;
+		const env_name = this.options.env;
+		const code = this.options.code;
+        	const name = this.options.template;
 		func.create_func_pkg(client,name,env_name,code);
 
 	}
