@@ -2,8 +2,8 @@
 //
 // Use a Custom Resource Definition to extend the Kubernetes API and the client.
 //
-var exports = module.exports = {};
-var fs = require('fs');
+let exports = module.exports = {};
+let fs = require('fs');
 const path = require('path');
 
 exports.delete_env = async function (client, env_name, nmspace) {
