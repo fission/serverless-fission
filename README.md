@@ -19,7 +19,7 @@ $ npm install serverless -g
 Clone repo and check the example function
 ```bash
 $ git clone https://github.com/infracloudio/serverless-fission/
-$ cd examples/test-examples
+$ cd examples/python
 $ cat serverless.yml
 service: hello
 
@@ -38,21 +38,17 @@ functions:
 
 Download dependencies
 ```bash
-$ npm install ../
+$ npm install ../../
 ```
-
+Create an Environment.
+```bash
+$ serverless create --template node-1 --img node --nmspace default
+Fission environment node-1 created.  
+```
 Deploy function.
 ```bash
-$ serverless deploy
-You can access your function by calling "curl $FISSION_ROUTER/hello" and get its ip address with "echo $FISSION_ROUTER".
-Serverless: Packaging service...
-Serverless: Excluding development dependencies...
-environment 'python' created
-
-1 environment(s) are present in this ns: default. All these envs share the same service account token, with previleges to view secrets 
-of all the functions referencing them. Envs can be created in different ns if isolation is needed   
-
-function 'hello' created
+$ serverless deploy --template hello --env node-1 --code hello.js
+Fission function hello created
 ```
 
 The function will be deployed to Kubernetes via fission.
@@ -70,7 +66,7 @@ fission-function   python-2b073331-7459-11e8-a089-080027cdd0a9-5h3iitxq-66b4cn8p
 
 Now you will be able to call the function:
 ```bash
-$ curl $FISSION_ROUTER/hello
+$ fission invoke --router 127.0.0.1 --port 8443 --fnname hello
 hello world
 ```
 
@@ -78,6 +74,16 @@ If you are using minikube, you can call the function through HTTP and the Node P
 ```bash
 $ curl  http://$(minikube ip):31314/hello
 hello world
+```
+If you want to remove the deployed function.
+```bash
+$ serverless remove  --fn hello --nmspace default
+Fission function hello deleted.
+```
+If you wanted to rollback one of the created environments.
+```bash
+$ serverless rollback --env node-1 --nmspace
+Fission environment 'python' deleted
 ```
 Demo:
 [![asciicast](https://asciinema.org/a/uhBySeyWY8tvqAIbIlaTmLwSA.png)](https://asciinema.org/a/uhBySeyWY8tvqAIbIlaTmLwSA)
