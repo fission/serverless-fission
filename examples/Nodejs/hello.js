@@ -4,3 +4,4 @@ module.exports = async function (context) {
         body: "Hello, world!\n"
     };
 }
+
