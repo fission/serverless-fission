@@ -13,7 +13,7 @@
 'use strict';
 const Client = require('kubernetes-client').Client;
 const config = require('kubernetes-client').config;
-var func = require('../common.js');
+let func = require('../common.js');
 const client = new Client({ config: config.fromKubeconfig(), version: '1.9' });
 class fissionRemove {
     constructor(serverless, options) {
@@ -46,12 +46,12 @@ class fissionRemove {
    async removeFunction() {
         const all = await client.apis['apiextensions.k8s.io'].v1beta1.customresourcedefinitions.get();
 
-                for (var i in all['body']['items']) {
-                    var item = all['body']['items'][i]
+                for (let i in all['body']['items']) {
+                    let item = all['body']['items'][i]
                     client.addCustomResourceDefinition(item);
                 }
-        var fn_name = this.options.fn;
-        var nmspace = this.options.nmspace;
+        const fn_name = this.options.fn;
+        const nmspace = this.options.nmspace;
         func.delete_fn(client, fn_name, nmspace);
     }
 }
