@@ -13,7 +13,7 @@
 'use strict';
 
 const Client = require('kubernetes-client').Client;
-var env_create = require("../common.js");
+let env_create = require("../common.js");
 const config = require('kubernetes-client').config;
 const client = new Client({ config: config.fromKubeconfig(), version: '1.9' });
 class fissionCreate {
@@ -53,13 +53,13 @@ class fissionCreate {
 async createFunction() {
      const all = await client.apis['apiextensions.k8s.io'].v1beta1.customresourcedefinitions.get();
 
-        for (var i in all['body']['items']) {
+        for (let i in all['body']['items']) {
                     var item = all['body']['items'][i]
                     client.addCustomResourceDefinition(item);
                 }
-	var env_name = this.options.template;
-	var nmspace = this.options.nmspace;
-	var img = this.options.img;
+	let env_name = this.options.template;
+	let nmspace = this.options.nmspace;
+	let img = this.options.img;
     env_create.create_env(client,env_name,nmspace,img);
 	}
 }
