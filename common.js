@@ -8,11 +8,11 @@ const path = require('path');
 
 exports.delete_env = async function (client, env_name, nmspace) {
     
-    var del_env = await client.apis['fission.io'].v1.namespaces(nmspace).environments(env_name).delete();
+    const del_env = await client.apis['fission.io'].v1.namespaces(nmspace).environments(env_name).delete();
     console.log("Fission envirnment ",del_env['body']['details']['name']," deleted");
 }
 exports.delete_fn = async function (client, fn_name, nmspace) {
-    var del_fn = await client.apis['fission.io'].v1.namespaces(nmspace).functions(fn_name).delete();
+    const del_fn = await client.apis['fission.io'].v1.namespaces(nmspace).functions(fn_name).delete();
     console.log("Fission function ",del_fn['body']['details']['name']," deleted");
 }
 exports.fn_code = async function (client, fn_name, nmspace) {
