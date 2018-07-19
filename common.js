@@ -4,7 +4,7 @@
 //
 var exports = module.exports = {};
 var fs = require('fs');
-var path = require('path');
+const path = require('path');
 
 exports.delete_env = async function (client, env_name, nmspace) {
     
@@ -17,16 +17,16 @@ exports.delete_fn = async function (client, fn_name, nmspace) {
 }
 exports.fn_code = async function (client, fn_name, nmspace) {
 
-    var fn_data = await client.apis['fission.io'].v1.namespaces(nmspace).functions(fn_name).get();
-    var pkg_name = fn_data['body']['spec']['package']['packageref']['name'];
-    var pkg_namespace = fn_data['body']['spec']['package']['packageref']['namespace'];
-    var pkg_data = await client.apis['fission.io'].v1.namespaces(pkg_namespace).packages(pkg_name).get();
-    var pkg_code = pkg_data['body']['spec']['deployment']['literal'];
-    var pkg_decode = new Buffer(pkg_code, 'base64');
+    const fn_data = await client.apis['fission.io'].v1.namespaces(nmspace).functions(fn_name).get();
+    const pkg_name = fn_data['body']['spec']['package']['packageref']['name'];
+    const pkg_namespace = fn_data['body']['spec']['package']['packageref']['namespace'];
+    const pkg_data = await client.apis['fission.io'].v1.namespaces(pkg_namespace).packages(pkg_name).get();
+    const pkg_code = pkg_data['body']['spec']['deployment']['literal'];
+    const pkg_decode = new Buffer(pkg_code, 'base64');
     console.log(pkg_decode.toString());
 }
 exports.fn_info = async function (client, fn_name, nmspace) {
-    var fn_info = await client.apis['fission.io'].v1.namespaces(nmspace).functions(fn_name).getStream();
+    const fn_info = await client.apis['fission.io'].v1.namespaces(nmspace).functions(fn_name).getStream();
     console.log(fn_info);
 }
 
@@ -128,7 +128,7 @@ function get_contents(filePath, cb) {
 exports.create_func_pkg = async function (client,name,env_name,code) {
     const filename = code;
     // if http or https download to temp dir
-    var parentDir = path.resolve(process.cwd(), '.');
+    let parentDir = path.resolve(process.cwd(), '.');
     const filePath = path.join(parentDir, filename);
     get_contents(filePath, async function (data) {
         const archive = {
@@ -136,7 +136,7 @@ exports.create_func_pkg = async function (client,name,env_name,code) {
             literal: Buffer(data).toString('base64'),
             checksum: {}
         }
-        var pkg_name = await create_pkgs(client, archive);
+        const pkg_name = await create_pkgs(client, archive);
         create_func(client,name, env_name, pkg_name['body']);
     });
 }
