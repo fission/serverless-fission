@@ -11,7 +11,7 @@
  limitations under the License.
 */
 'use strict';
-var http = require('http');
+let http = require('http');
 class fissionInvoke {
 	constructor(serverless,options) {
 	this.serverless = serverless;
