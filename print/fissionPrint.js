@@ -14,7 +14,7 @@
 const Client = require('kubernetes-client').Client;
 const config = require('kubernetes-client').config;
 const client = new Client({ config: config.fromKubeconfig(), version: '1.9' });
-var func = require('../common.js');
+let func = require('../common.js');
 class fissionPrint {
 	constructor(serverless,options) {
 	this.serverless = serverless;
@@ -47,12 +47,12 @@ class fissionPrint {
 	async printFunction() {
         const all = await client.apis['apiextensions.k8s.io'].v1beta1.customresourcedefinitions.get();
 
-                for (var i in all['body']['items']) {
-                    var item = all['body']['items'][i]
+                for (let i in all['body']['items']) {
+                    let item = all['body']['items'][i]
                     client.addCustomResourceDefinition(item);
                 }
-		var nmspace = this.options.nmspace;
-		var fn_name = this.options.fn;
+		let nmspace = this.options.nmspace;
+		let fn_name = this.options.fn;
 		func.fn_code(client,fn_name,nmspace);
 
 	}
