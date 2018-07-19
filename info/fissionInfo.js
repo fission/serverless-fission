@@ -51,8 +51,8 @@ class fissionInfo {
 			let item = all['body']['items'][i]
 			client.addCustomResourceDefinition(item);
 		}
-		let nmspace = this.options.nmspace;
-		let fn_name = this.options.fn;
+		const nmspace = this.options.nmspace;
+		const fn_name = this.options.fn;
 		func.fn_info(client, fn_name, nmspace);
 
 }
