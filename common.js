@@ -2,12 +2,12 @@
 //
 // Use a Custom Resource Definition to extend the Kubernetes API and the client.
 //
-let exports = module.exports = {};
+var exports = module.exports = {};
 let fs = require('fs');
 const path = require('path');
 
 exports.delete_env = async function (client, env_name, nmspace) {
-    
+
     const del_env = await client.apis['fission.io'].v1.namespaces(nmspace).environments(env_name).delete();
     console.log("Fission envirnment ",del_env['body']['details']['name']," deleted");
 }
@@ -58,7 +58,7 @@ exports.fn_info = async function (client, fn_name, nmspace) {
 }
 
 async function create_func(client,funcname,env_name,pkg_name) {
-    
+
     const fn = {
         apiVersion: 'fission.io/v1',
         kind: 'Function',

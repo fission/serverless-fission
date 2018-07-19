@@ -42,9 +42,9 @@ class fissionInfo {
 	this.hooks = {
 	'info:functions': this.infoFunction.bind(this)
 	}
-	
+
 	}
-	async info() {
+	async infoFunction() {
 		const all = await client.apis['apiextensions.k8s.io'].v1beta1.customresourcedefinitions.get();
 
 		for (let i in all['body']['items']) {
