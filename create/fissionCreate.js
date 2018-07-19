@@ -57,9 +57,9 @@ async createFunction() {
                     var item = all['body']['items'][i]
                     client.addCustomResourceDefinition(item);
                 }
-	let env_name = this.options.template;
-	let nmspace = this.options.nmspace;
-	let img = this.options.img;
+	const env_name = this.options.template;
+	const nmspace = this.options.nmspace;
+	const img = this.options.img;
     env_create.create_env(client,env_name,nmspace,img);
 	}
 }
