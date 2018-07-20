@@ -1,7 +1,7 @@
 {
   "name": "hello",
   "version": "1.0.0",
-  "description": "Example function for serverless kubeless",
+  "description": "Example function for serverless fission",
   "dependencies": {
     "kubernetes-client": "^5.3.1",
     "node-run-cmd": "^1.0.1",
