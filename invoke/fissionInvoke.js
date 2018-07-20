@@ -13,52 +13,52 @@
 'use strict';
 let http = require('http');
 class fissionInvoke {
-	constructor(serverless,options) {
-	this.serverless = serverless;
-	this.options = options || {};
-	this.provider = this.serverless.getProvider('fission');
-		this.commands = {
-			invoke: {
-				lifecycleEvents: [
-					'functions'
-				],
-				options: {
-					router: {
-						usage: 'Specify the router ip (e.g. "--router $FISSION_ROUTER")',
-						shortcut: 'ip',
-						required: true
-					},
-					ports: {
-						usage: 'Specify the exposed port number. (e.g. "--ports 31314")',
-						shortcut: 'p',
-						default: '8443'
-					},
-					fnname: {
-						usage: 'Specify the name of the function you wanna call. (e.g. "--fnname hello_world")',
-						shortcut: 'f',
-						default: '8443'
-					}
-					
-				}
-			},
-		};
-		this.hooks = {
-			'invoke:functions': this.invokeFunction.bind(this)
-		};
-	}
+    constructor(serverless,options) {
+    this.serverless = serverless;
+    this.options = options || {};
+    this.provider = this.serverless.getProvider('fission');
+        this.commands = {
+            invoke: {
+                lifecycleEvents: [
+                    'functions'
+                ],
+                options: {
+                    router: {
+                        usage: 'Specify the router ip (e.g. "--router $FISSION_ROUTER")',
+                        shortcut: 'ip',
+                        required: true
+                    },
+                    ports: {
+                        usage: 'Specify the exposed port number. (e.g. "--ports 31314")',
+                        shortcut: 'p',
+                        default: '8443'
+                    },
+                    fnname: {
+                        usage: 'Specify the name of the function you wanna call. (e.g. "--fnname hello_world")',
+                        shortcut: 'f',
+                        default: '8443'
+                    }
+                    
+                }
+            },
+        };
+        this.hooks = {
+            'invoke:functions': this.invokeFunction.bind(this)
+        };
+    }
 
-	invokeFunction() {
-		var options = {
-			host: this.options.router,
-			port: this.options.ports,
-			path: this.options.fnname
-		};
+    invokeFunction() {
+        var options = {
+            host: this.options.router,
+            port: this.options.ports,
+            path: this.options.fnname
+        };
 
-		http.get(options, function (res) {
-			console.log("Got response: " + res);
-		}).on('error', function (e) {
-			console.log("Got error: " + e.message);
-		});
+        http.get(options, function (res) {
+            console.log("Got response: " + res);
+        }).on('error', function (e) {
+            console.log("Got error: " + e.message);
+        });
 }
 }
 module.exports = fissionInvoke;

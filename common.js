@@ -23,10 +23,12 @@ exports.fn_code = async function (client, fn_name, nmspace) {
     const pkg_data = await client.apis['fission.io'].v1.namespaces(pkg_namespace).packages(pkg_name).get();
     const pkg_code = pkg_data['body']['spec']['deployment']['literal'];
     const pkg_decode = new Buffer(pkg_code, 'base64');
+    console.log("Code for", fn_name, "in", nmspace, ":\n");
     console.log(pkg_decode.toString());
 }
 exports.fn_info = async function (client, fn_name, nmspace) {
     const fn_info = await client.apis['fission.io'].v1.namespaces(nmspace).functions(fn_name).getStream();
+    console.log("Detailed logs and Information for", fn_name, "in ", nmspace, ":\n");
     console.log(fn_info);
 }
 

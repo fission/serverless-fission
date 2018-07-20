@@ -17,37 +17,37 @@ let env_create = require("../common.js");
 const config = require('kubernetes-client').config;
 const client = new Client({ config: config.fromKubeconfig(), version: '1.9' });
 class fissionCreate {
-	constructor(serverless,options) {
-	this.serverless = serverless;
-	this.options = options;
-	this.provider = this.serverless.getProvider('fission');
-		this.commands = {
-			create: {
-				lifecycleEvents: [
-					'functions'
-				],
-				options: {
-					template: {
-						usage: 'Specify the environment name (e.g. "--template python")',
-						shortcut: 'env',
-						required: true
-					},
-					img: {
-						usage: 'Specify the environment you want to deploy in (e.g. "--img python")',
-						shortcut: 'img',
-						required: true
-					},
-					nmspace: {
-						usage: 'Specify the namspace in which you want to deploy the environment. (e.g. "--nmspace default")',
-						shortcut: 'nm',
-						default: 'dev'
-					}
-				}
-			},
-		};
-	this.hooks = {
-		'create:functions': this.createFunction.bind(this)
-	};
+    constructor(serverless,options) {
+    this.serverless = serverless;
+    this.options = options;
+    this.provider = this.serverless.getProvider('fission');
+        this.commands = {
+            create: {
+                lifecycleEvents: [
+                    'functions'
+                ],
+                options: {
+                    template: {
+                        usage: 'Specify the environment name (e.g. "--template python")',
+                        shortcut: 'env',
+                        required: true
+                    },
+                    img: {
+                        usage: 'Specify the environment you want to deploy in (e.g. "--img python")',
+                        shortcut: 'img',
+                        required: true
+                    },
+                    nmspace: {
+                        usage: 'Specify the namspace in which you want to deploy the environment. (e.g. "--nmspace default")',
+                        shortcut: 'nm',
+                        default: 'dev'
+                    }
+                }
+            },
+        };
+    this.hooks = {
+        'create:functions': this.createFunction.bind(this)
+    };
 }
 
 async createFunction() {
@@ -57,11 +57,11 @@ async createFunction() {
                     let item = all['body']['items'][i];
                     client.addCustomResourceDefinition(item);
                 }
-	const env_name = this.options.template;
-	const nmspace = this.options.nmspace;
-	const img = this.options.img;
+    const env_name = this.options.template;
+    const nmspace = this.options.nmspace;
+    const img = this.options.img;
     env_create.create_env(client, env_name, nmspace, img);
-	}
+    }
 }
 
 module.exports = fissionCreate;
