@@ -30,7 +30,7 @@ exports.fn_info = async function (client, fn_name, nmspace) {
     console.log(fn_info);
 }
 
- exports.create_env = async function (client,env_name,nmspace,img) {
+ exports.create_env = async function (client, env_name, nmspace, img) {
     const env = {
         apiVersion: 'fission.io/v1',
         kind: 'Environment',
@@ -57,7 +57,7 @@ exports.fn_info = async function (client, fn_name, nmspace) {
     console.log("Fission environment ",envs['body']['metadata']['name']," created");
 }
 
-async function create_func(client,funcname,env_name,pkg_name) {
+async function create_func(client, funcname, env_name, pkg_name) {
 
     const fn = {
         apiVersion: 'fission.io/v1',
@@ -125,7 +125,7 @@ function get_contents(filePath, cb) {
         cb(data);
     });
 }
-exports.create_func_pkg = async function (client,name,env_name,code) {
+exports.create_func_pkg = async function (client, name, env_name, code) {
     const filename = code;
     // if http or https download to temp dir
     let parentDir = path.resolve(process.cwd(), '.');
@@ -137,6 +137,6 @@ exports.create_func_pkg = async function (client,name,env_name,code) {
             checksum: {}
         }
         const pkg_name = await create_pkgs(client, archive);
-        create_func(client,name, env_name, pkg_name['body']);
+        create_func(client, name, env_name, pkg_name['body']);
     });
 }
