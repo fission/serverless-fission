@@ -55,7 +55,7 @@ exports.create_env = async function(client, env_name, nmspace, img) {
             version: 1
         }
     }
-    const envs = await client.apis['fission.io'].v1.namespaces('default').environments.post({
+    const envs = await client.apis['fission.io'].v1.namespaces(nmspace).environments.post({
         body: env
     });
     console.log("Fission environment ", envs['body']['metadata']['name'], " created");
@@ -83,7 +83,7 @@ async function create_func(client, funcname, env_name, pkg_name, nmspace) {
             },
             package: {
                 packageref: {
-                    namespace: 'default',
+                    namespace: nmspace,
                     name: pkg_name['metadata']['name'],
                     resourceVersion: pkg_name['metadata']['resourceVersion'],
                 }
@@ -92,13 +92,13 @@ async function create_func(client, funcname, env_name, pkg_name, nmspace) {
             secrets: null
         }
     }
-    const fns = await client.apis['fission.io'].v1.namespaces('default').functions.post({
+    const fns = await client.apis['fission.io'].v1.namespaces(nmspace).functions.post({
         body: fn
     });
     console.log("Fission function ", fns['body']['metadata']['name'], " created");
 }
 
-async function create_pkgs(client, archive, new_name, nmspace) {
+async function create_pkgs(client, archive, new_name, nmspace, env_name) {
     const pkg = {
         apiVersion: 'fission.io/v1',
         kind: 'Package',
@@ -110,15 +110,15 @@ async function create_pkgs(client, archive, new_name, nmspace) {
         spec: {
             deployment: archive,
             environment: {
-                name: 'node',
-                namespace: 'default'
+                name: env_name,
+                namespace: nmspace
             },
             source: {
                 checksum: {}
             }
         }
     }
-    const pkgs = await client.apis['fission.io'].v1.namespaces('default').packages.post({
+    const pkgs = await client.apis['fission.io'].v1.namespaces(nmspace).packages.post({
         body: pkg
     });
     return pkgs;
@@ -156,7 +156,7 @@ exports.create_func_pkg = async function(client, name, env_name, code, nmspace) 
             checksum: {}
         }
         const new_name = name + "-" + "js" + makeid();
-        const pkg_name = await create_pkgs(client, archive, new_name, nmspace);
+        const pkg_name = await create_pkgs(client, archive, new_name, nmspace, env_name);
         create_func(client, name, env_name, pkg_name['body'], nmspace);
     });
 }
