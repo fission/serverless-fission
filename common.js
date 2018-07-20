@@ -79,7 +79,7 @@ async function create_func(client, funcname, env_name, pkg_name, nmspace) {
             configmaps: null,
             environment: {
                 name: env_name,
-                namespace: 'default',
+                namespace: nmspace,
             },
             package: {
                 packageref: {
