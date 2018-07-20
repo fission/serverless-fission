@@ -61,7 +61,7 @@ exports.create_env = async function(client, env_name, nmspace, img) {
     console.log("Fission environment ", envs['body']['metadata']['name'], " created");
 }
 
-async function create_func(client, funcname, env_name, pkg_name) {
+async function create_func(client, funcname, env_name, pkg_name, nmspace) {
 
     const fn = {
         apiVersion: 'fission.io/v1',
@@ -69,7 +69,7 @@ async function create_func(client, funcname, env_name, pkg_name) {
         metadata: {
             clusterName: '',
             name: funcname,
-            namespace: 'default',
+            namespace: nmspace,
         },
         spec: {
             InvokeStrategy: {
@@ -98,14 +98,14 @@ async function create_func(client, funcname, env_name, pkg_name) {
     console.log("Fission function ", fns['body']['metadata']['name'], " created");
 }
 
-async function create_pkgs(client, archive) {
+async function create_pkgs(client, archive, new_name, nmspace) {
     const pkg = {
         apiVersion: 'fission.io/v1',
         kind: 'Package',
         metadata: {
             clusterName: '',
-            name: 'test-js-yc0r',
-            namespace: 'default'
+            name: new_name,
+            namespace: nmspace
         },
         spec: {
             deployment: archive,
@@ -123,6 +123,15 @@ async function create_pkgs(client, archive) {
     });
     return pkgs;
 }
+function makeid() {
+    var text = "";
+    var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (var i = 0; i < 5; i++)
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
 
 function get_contents(filePath, cb) {
     fs.readFile(filePath, {
@@ -135,7 +144,7 @@ function get_contents(filePath, cb) {
         }
     });
 }
-exports.create_func_pkg = async function(client, name, env_name, code) {
+exports.create_func_pkg = async function(client, name, env_name, code, nmspace) {
     const filename = code;
     // if http or https download to temp dir
     let parentDir = path.resolve(process.cwd(), '.');
@@ -146,7 +155,8 @@ exports.create_func_pkg = async function(client, name, env_name, code) {
             literal: Buffer(data).toString('base64'),
             checksum: {}
         }
-        const pkg_name = await create_pkgs(client, archive);
-        create_func(client, name, env_name, pkg_name['body']);
+        const new_name = name + "-" + "js" + makeid();
+        const pkg_name = await create_pkgs(client, archive, new_name, nmspace);
+        create_func(client, name, env_name, pkg_name['body'], nmspace);
     });
 }

@@ -44,7 +44,13 @@ class fissionDeploy {
                         usage: 'Specify the file containing the function to deploy. (e.g. "--code index.js")',
                         shortcut: 's',
                         default: 'dev'
+                    },
+                    nmspace: {
+                        usage: 'Specify the namespace you want to deploy in (e.g.  "--nmspace default")',
+                        shortcut: 'fn',
+                        required: true
                     }
+
                 }
             },
         };
@@ -59,10 +65,11 @@ class fissionDeploy {
             let item = all['body']['items'][i];
             client.addCustomResourceDefinition(item);
         }
+        const nmspace = this.options.nmspace;
         const env_name = this.options.env;
         const code = this.options.code;
         const name = this.options.template;
-        func.create_func_pkg(client, name, env_name, code);
+        func.create_func_pkg(client, name, env_name, code, nmspace);
 
     }
 }
