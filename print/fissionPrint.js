@@ -48,12 +48,12 @@ class fissionPrint {
         const all = await client.apis['apiextensions.k8s.io'].v1beta1.customresourcedefinitions.get();
 
                 for (let i in all['body']['items']) {
-                    let item = all['body']['items'][i]
+                    let item = all['body']['items'][i];
                     client.addCustomResourceDefinition(item);
                 }
 		const nmspace = this.options.nmspace;
 		const fn_name = this.options.fn;
-		func.fn_code(client,fn_name,nmspace);
+		func.fn_code(client, fn_name, nmspace);
 
 	}
 }
