@@ -53,13 +53,13 @@ class fissionDeploy {
         const all = await client.apis['apiextensions.k8s.io'].v1beta1.customresourcedefinitions.get();
 
                 for (let i in all['body']['items']) {
-                    let item = all['body']['items'][i]
+                    let item = all['body']['items'][i];
                     client.addCustomResourceDefinition(item);
                 }
 		const env_name = this.options.env;
 		const code = this.options.code;
                 const name = this.options.template;
-		func.create_func_pkg(client,name,env_name,code);
+		func.create_func_pkg(client, name, env_name, code);
 
 	}
 }
