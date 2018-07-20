@@ -85,3 +85,5 @@ If you wanted to rollback one of the created environments.
 $ serverless rollback --env node-1 --nmspace
 Fission environment 'python' deleted
 ```
+Demo:
+[![asciicast](https://asciinema.org/a/J2rJ77oS1TVWy0sQEfRNzzntJ.png)](https://asciinema.org/a/J2rJ77oS1TVWy0sQEfRNzzntJ)
