@@ -66,7 +66,7 @@ fission-function   python-2b073331-7459-11e8-a089-080027cdd0a9-5h3iitxq-66b4cn8p
 
 Now you will be able to call the function:
 ```bash
-$ fission invoke --router 127.0.0.1 --port 8443 --fnname hello
+$ serverless invoke --router 127.0.0.1 --port 8443 --fnname hello
 hello world
 ```
 
