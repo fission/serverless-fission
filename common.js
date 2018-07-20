@@ -122,7 +122,9 @@ function get_contents(filePath, cb) {
         if (err) {
             console.log(err);
         }
+        else{
         cb(data);
+        }
     });
 }
 exports.create_func_pkg = async function (client, name, env_name, code) {
