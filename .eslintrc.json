@@ -1,0 +1,23 @@
+{
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "plugins": [
+     "import",
+     "async"
+  ],
+  "settings": {
+    "import/parser": "eslint"
+  },
+  "parserOptions": {
+    "ecmaVersion": 2017
+  },
+  "rules": {
+    "indent": ["error", 4],
+    "linebreak-style": ["error", "unix"],
+    "no-cond-assign": ["error", "always"],
+    "no-console": "off"
+  },
+  "extends": "eslint:recommended"
+}

@@ -11,67 +11,52 @@
  limitations under the License.
 */
 'use strict';
-
 const Client = require('kubernetes-client').Client;
 const config = require('kubernetes-client').config;
+let func = require('../common.js');
 const client = new Client({
     config: config.fromKubeconfig(),
     version: '1.9'
 });
-let func = require('../common.js');
-class fissionDeploy {
+class fissionRollback {
     constructor(serverless, options) {
         this.serverless = serverless;
         this.options = options || {};
         this.provider = this.serverless.getProvider('fission');
         this.commands = {
-            deploy: {
+            rollback: {
                 lifecycleEvents: [
                     'functions'
                 ],
                 options: {
-                    template: {
-                        usage: 'Specify the name of the function you want to deploy in (e.g. "--template hello_world")',
-                        shortcut: 'fn',
-                        required: true
-                    },
                     env: {
-                        usage: 'Specify the environment you want to deploy in (e.g. "--env python")',
-                        shortcut: 'fn',
+                        usage: 'Specify the environment you want to delete (e.g. "--env python")',
+                        shortcut: 'env',
                         required: true
-                    },
-                    code: {
-                        usage: 'Specify the file containing the function to deploy. (e.g. "--code index.js")',
-                        shortcut: 's',
-                        default: 'dev'
                     },
                     nmspace: {
-                        usage: 'Specify the namespace you want to deploy in (e.g.  "--nmspace default")',
-                        shortcut: 'fn',
-                        required: true
+                        usage: 'Specify the namespace where the environment is deployed (e.g. "--nmspace default")',
+                        shortcut: 'nm',
+                        default: 'dev'
                     }
-
                 }
             },
         };
         this.hooks = {
-            'deploy:functions': this.deployFunction.bind(this)
+            'rollback:functions': this.rollbackFunction.bind(this)
         };
     }
-    async deployFunction() {
+    async rollbackFunction() {
         const all = await client.apis['apiextensions.k8s.io'].v1beta1.customresourcedefinitions.get();
 
         for (let i in all['body']['items']) {
             let item = all['body']['items'][i];
             client.addCustomResourceDefinition(item);
         }
-        const nmspace = this.options.nmspace;
         const env_name = this.options.env;
-        const code = this.options.code;
-        const name = this.options.template;
-        func.create_func_pkg(client, name, env_name, code, nmspace);
-
+        const nmspace = this.options.nmspace;
+        func.delete_env(client, env_name, nmspace);
     }
 }
 
-module.exports = fissionDeploy;
+module.exports = fissionRollback;

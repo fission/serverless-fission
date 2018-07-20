@@ -11,7 +11,6 @@
  limitations under the License.
 */
 'use strict';
-
 const Client = require('kubernetes-client').Client;
 const config = require('kubernetes-client').config;
 const client = new Client({
@@ -19,59 +18,46 @@ const client = new Client({
     version: '1.9'
 });
 let func = require('../common.js');
-class fissionDeploy {
+class fissionInfo {
     constructor(serverless, options) {
         this.serverless = serverless;
         this.options = options || {};
         this.provider = this.serverless.getProvider('fission');
         this.commands = {
-            deploy: {
+            info: {
                 lifecycleEvents: [
                     'functions'
                 ],
                 options: {
-                    template: {
-                        usage: 'Specify the name of the function you want to deploy in (e.g. "--template hello_world")',
+                    fn: {
+                        usage: 'Specify the function name (e.g. "--fn hello_world")',
                         shortcut: 'fn',
                         required: true
-                    },
-                    env: {
-                        usage: 'Specify the environment you want to deploy in (e.g. "--env python")',
-                        shortcut: 'fn',
-                        required: true
-                    },
-                    code: {
-                        usage: 'Specify the file containing the function to deploy. (e.g. "--code index.js")',
-                        shortcut: 's',
-                        default: 'dev'
                     },
                     nmspace: {
-                        usage: 'Specify the namespace you want to deploy in (e.g.  "--nmspace default")',
-                        shortcut: 'fn',
+                        usage: 'Specify the namespace the function is deployed in (e.g. "--nmspace default")',
+                        shortcut: 'nmspace',
                         required: true
                     }
-
                 }
             },
         };
         this.hooks = {
-            'deploy:functions': this.deployFunction.bind(this)
-        };
+            'info:functions': this.infoFunction.bind(this)
+        }
+
     }
-    async deployFunction() {
+    async infoFunction() {
         const all = await client.apis['apiextensions.k8s.io'].v1beta1.customresourcedefinitions.get();
 
         for (let i in all['body']['items']) {
-            let item = all['body']['items'][i];
+            let item = all['body']['items'][i]
             client.addCustomResourceDefinition(item);
         }
         const nmspace = this.options.nmspace;
-        const env_name = this.options.env;
-        const code = this.options.code;
-        const name = this.options.template;
-        func.create_func_pkg(client, name, env_name, code, nmspace);
+        const fn_name = this.options.fn;
+        func.fn_info(client, fn_name, nmspace);
 
     }
 }
-
-module.exports = fissionDeploy;
+module.exports = fissionInfo;
