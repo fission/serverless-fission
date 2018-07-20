@@ -60,7 +60,7 @@ async createFunction() {
 	const env_name = this.options.template;
 	const nmspace = this.options.nmspace;
 	const img = this.options.img;
-    env_create.create_env(client,env_name,nmspace,img);
+    env_create.create_env(client, env_name, nmspace, img);
 	}
 }
 
