@@ -13,13 +13,16 @@
 'use strict';
 const Client = require('kubernetes-client').Client;
 const config = require('kubernetes-client').config;
-const client = new Client({ config: config.fromKubeconfig(), version: '1.9' });
+const client = new Client({
+    config: config.fromKubeconfig(),
+    version: '1.9'
+});
 let func = require('../common.js');
 class fissionPrint {
-    constructor(serverless,options) {
-    this.serverless = serverless;
-    this.options = options || {};
-    this.provider = this.serverless.getProvider('fission');
+    constructor(serverless, options) {
+        this.serverless = serverless;
+        this.options = options || {};
+        this.provider = this.serverless.getProvider('fission');
         this.commands = {
             print: {
                 lifecycleEvents: [
@@ -39,18 +42,18 @@ class fissionPrint {
                 }
             },
         };
-    this.hooks = {
-        'print:functions': this.printFunction.bind(this)
+        this.hooks = {
+            'print:functions': this.printFunction.bind(this)
+        }
     }
-    }
-        
+
     async printFunction() {
         const all = await client.apis['apiextensions.k8s.io'].v1beta1.customresourcedefinitions.get();
 
-                for (let i in all['body']['items']) {
-                    let item = all['body']['items'][i];
-                    client.addCustomResourceDefinition(item);
-                }
+        for (let i in all['body']['items']) {
+            let item = all['body']['items'][i];
+            client.addCustomResourceDefinition(item);
+        }
         const nmspace = this.options.nmspace;
         const fn_name = this.options.fn;
         func.fn_code(client, fn_name, nmspace);

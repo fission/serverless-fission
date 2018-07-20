@@ -14,7 +14,10 @@
 const Client = require('kubernetes-client').Client;
 const config = require('kubernetes-client').config;
 let func = require('../common.js');
-const client = new Client({ config: config.fromKubeconfig(), version: '1.9' });
+const client = new Client({
+    config: config.fromKubeconfig(),
+    version: '1.9'
+});
 class fissionRemove {
     constructor(serverless, options) {
         this.serverless = serverless;
@@ -43,13 +46,13 @@ class fissionRemove {
             'remove:functions': this.removeFunction.bind(this)
         };
     }
-   async removeFunction() {
+    async removeFunction() {
         const all = await client.apis['apiextensions.k8s.io'].v1beta1.customresourcedefinitions.get();
 
-                for (let i in all['body']['items']) {
-                    let item = all['body']['items'][i]
-                    client.addCustomResourceDefinition(item);
-                }
+        for (let i in all['body']['items']) {
+            let item = all['body']['items'][i]
+            client.addCustomResourceDefinition(item);
+        }
         const fn_name = this.options.fn;
         const nmspace = this.options.nmspace;
         func.delete_fn(client, fn_name, nmspace);

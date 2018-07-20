@@ -22,17 +22,17 @@ const fissionPrint = require('./print/fissionPrint');
 const fissionRemove = require('./remove/fissionRemove');
 
 class fissionplugin {
-  constructor(serverless, options) {
-    this.serverless = serverless;
-    this.options = options;
-   this.serverless.pluginManager.addPlugin(fissionProvider);
-   this.serverless.pluginManager.addPlugin(fissionDeploy);
-   this.serverless.pluginManager.addPlugin(fissionCreate);
-   this.serverless.pluginManager.addPlugin(fissionInvoke);
-   this.serverless.pluginManager.addPlugin(fissionPrint);
-   this.serverless.pluginManager.addPlugin(fissionInfo);  
-   this.serverless.pluginManager.addPlugin(fissionRollback);  
-   this.serverless.pluginManager.addPlugin(fissionRemove);
-  }
+    constructor(serverless, options) {
+        this.serverless = serverless;
+        this.options = options;
+        this.serverless.pluginManager.addPlugin(fissionProvider);
+        this.serverless.pluginManager.addPlugin(fissionDeploy);
+        this.serverless.pluginManager.addPlugin(fissionCreate);
+        this.serverless.pluginManager.addPlugin(fissionInvoke);
+        this.serverless.pluginManager.addPlugin(fissionPrint);
+        this.serverless.pluginManager.addPlugin(fissionInfo);
+        this.serverless.pluginManager.addPlugin(fissionRollback);
+        this.serverless.pluginManager.addPlugin(fissionRemove);
+    }
 }
 module.exports = fissionplugin;

@@ -11,54 +11,53 @@
  limitations under the License.
 */
 'use strict';
-let http = require('http');
-class fissionInvoke {
-    constructor(serverless,options) {
-    this.serverless = serverless;
-    this.options = options || {};
-    this.provider = this.serverless.getProvider('fission');
+const Client = require('kubernetes-client').Client;
+const config = require('kubernetes-client').config;
+const client = new Client({
+    config: config.fromKubeconfig(),
+    version: '1.9'
+});
+let func = require('../common.js');
+class fissionInfo {
+    constructor(serverless, options) {
+        this.serverless = serverless;
+        this.options = options || {};
+        this.provider = this.serverless.getProvider('fission');
         this.commands = {
-            invoke: {
+            info: {
                 lifecycleEvents: [
                     'functions'
                 ],
                 options: {
-                    router: {
-                        usage: 'Specify the router ip (e.g. "--router $FISSION_ROUTER")',
-                        shortcut: 'ip',
+                    fn: {
+                        usage: 'Specify the function name (e.g. "--fn hello_world")',
+                        shortcut: 'fn',
                         required: true
                     },
-                    ports: {
-                        usage: 'Specify the exposed port number. (e.g. "--ports 31314")',
-                        shortcut: 'p',
-                        default: '8443'
-                    },
-                    fnname: {
-                        usage: 'Specify the name of the function you wanna call. (e.g. "--fnname hello_world")',
-                        shortcut: 'f',
-                        default: '8443'
+                    nmspace: {
+                        usage: 'Specify the namespace the function is deployed in (e.g. "--nmspace default")',
+                        shortcut: 'nmspace',
+                        required: true
                     }
-                    
                 }
             },
         };
         this.hooks = {
-            'invoke:functions': this.invokeFunction.bind(this)
-        };
+            'info:functions': this.infoFunction.bind(this)
+        }
+
     }
+    async infoFunction() {
+        const all = await client.apis['apiextensions.k8s.io'].v1beta1.customresourcedefinitions.get();
 
-    invokeFunction() {
-        var options = {
-            host: this.options.router,
-            port: this.options.ports,
-            path: this.options.fnname
-        };
+        for (let i in all['body']['items']) {
+            let item = all['body']['items'][i]
+            client.addCustomResourceDefinition(item);
+        }
+        const nmspace = this.options.nmspace;
+        const fn_name = this.options.fn;
+        func.fn_info(client, fn_name, nmspace);
 
-        http.get(options, function (res) {
-            console.log("Got response: " + res);
-        }).on('error', function (e) {
-            console.log("Got error: " + e.message);
-        });
+    }
 }
-}
-module.exports = fissionInvoke;
+module.exports = fissionInfo;

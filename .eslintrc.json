@@ -14,6 +14,9 @@
     "ecmaVersion": 2017
   },
   "rules": {
+    "indent": ["error", 4],
+    "linebreak-style": ["error", "unix"],
+    "no-cond-assign": ["error", "always"],
     "no-console": "off"
   },
   "extends": "eslint:recommended"

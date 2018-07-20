@@ -6,16 +6,16 @@ var exports = module.exports = {};
 let fs = require('fs');
 const path = require('path');
 
-exports.delete_env = async function (client, env_name, nmspace) {
+exports.delete_env = async function(client, env_name, nmspace) {
 
     const del_env = await client.apis['fission.io'].v1.namespaces(nmspace).environments(env_name).delete();
-    console.log("Fission envirnment ",del_env['body']['details']['name']," deleted");
+    console.log("Fission envirnment ", del_env['body']['details']['name'], " deleted");
 }
-exports.delete_fn = async function (client, fn_name, nmspace) {
+exports.delete_fn = async function(client, fn_name, nmspace) {
     const del_fn = await client.apis['fission.io'].v1.namespaces(nmspace).functions(fn_name).delete();
-    console.log("Fission function ",del_fn['body']['details']['name']," deleted");
+    console.log("Fission function ", del_fn['body']['details']['name'], " deleted");
 }
-exports.fn_code = async function (client, fn_name, nmspace) {
+exports.fn_code = async function(client, fn_name, nmspace) {
 
     const fn_data = await client.apis['fission.io'].v1.namespaces(nmspace).functions(fn_name).get();
     const pkg_name = fn_data['body']['spec']['package']['packageref']['name'];
@@ -26,13 +26,13 @@ exports.fn_code = async function (client, fn_name, nmspace) {
     console.log("Code for", fn_name, "in", nmspace, ":\n");
     console.log(pkg_decode.toString());
 }
-exports.fn_info = async function (client, fn_name, nmspace) {
+exports.fn_info = async function(client, fn_name, nmspace) {
     const fn_info = await client.apis['fission.io'].v1.namespaces(nmspace).functions(fn_name).getStream();
     console.log("Detailed logs and Information for", fn_name, "in ", nmspace, ":\n");
     console.log(fn_info);
 }
 
- exports.create_env = async function (client, env_name, nmspace, img) {
+exports.create_env = async function(client, env_name, nmspace, img) {
     const env = {
         apiVersion: 'fission.io/v1',
         kind: 'Environment',
@@ -52,11 +52,13 @@ exports.fn_info = async function (client, fn_name, nmspace) {
                 loadendpointpath: '',
                 loadendpointport: 0
             },
-        version: 1
+            version: 1
         }
     }
-    const envs = await client.apis['fission.io'].v1.namespaces('default').environments.post({body: env});
-    console.log("Fission environment ",envs['body']['metadata']['name']," created");
+    const envs = await client.apis['fission.io'].v1.namespaces('default').environments.post({
+        body: env
+    });
+    console.log("Fission environment ", envs['body']['metadata']['name'], " created");
 }
 
 async function create_func(client, funcname, env_name, pkg_name) {
@@ -84,14 +86,15 @@ async function create_func(client, funcname, env_name, pkg_name) {
                     namespace: 'default',
                     name: pkg_name['metadata']['name'],
                     resourceVersion: pkg_name['metadata']['resourceVersion'],
-       }
+                }
             },
-            resources: {
-            },
+            resources: {},
             secrets: null
         }
     }
-    const fns = await client.apis['fission.io'].v1.namespaces('default').functions.post({body: fn});
+    const fns = await client.apis['fission.io'].v1.namespaces('default').functions.post({
+        body: fn
+    });
     console.log("Fission function ", fns['body']['metadata']['name'], " created");
 }
 
@@ -110,31 +113,34 @@ async function create_pkgs(client, archive) {
                 name: 'node',
                 namespace: 'default'
             },
-           source: {
+            source: {
                 checksum: {}
             }
         }
     }
-    const pkgs = await client.apis['fission.io'].v1.namespaces('default').packages.post({ body: pkg});
+    const pkgs = await client.apis['fission.io'].v1.namespaces('default').packages.post({
+        body: pkg
+    });
     return pkgs;
 }
 
 function get_contents(filePath, cb) {
-    fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
+    fs.readFile(filePath, {
+        encoding: 'utf-8'
+    }, function(err, data) {
         if (err) {
             console.log(err);
-        }
-        else{
-        cb(data);
+        } else {
+            cb(data);
         }
     });
 }
-exports.create_func_pkg = async function (client, name, env_name, code) {
+exports.create_func_pkg = async function(client, name, env_name, code) {
     const filename = code;
     // if http or https download to temp dir
     let parentDir = path.resolve(process.cwd(), '.');
     const filePath = path.join(parentDir, filename);
-    get_contents(filePath, async function (data) {
+    get_contents(filePath, async function(data) {
         const archive = {
             type: 'literal',
             literal: Buffer(data).toString('base64'),

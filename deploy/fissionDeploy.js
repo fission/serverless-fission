@@ -14,13 +14,16 @@
 
 const Client = require('kubernetes-client').Client;
 const config = require('kubernetes-client').config;
-const client = new Client({ config: config.fromKubeconfig(), version: '1.9' });
+const client = new Client({
+    config: config.fromKubeconfig(),
+    version: '1.9'
+});
 let func = require('../common.js');
 class fissionDeploy {
-    constructor(serverless,options) {
-    this.serverless = serverless;
-    this.options = options || {};
-    this.provider = this.serverless.getProvider('fission');
+    constructor(serverless, options) {
+        this.serverless = serverless;
+        this.options = options || {};
+        this.provider = this.serverless.getProvider('fission');
         this.commands = {
             deploy: {
                 lifecycleEvents: [
@@ -48,17 +51,17 @@ class fissionDeploy {
         this.hooks = {
             'deploy:functions': this.deployFunction.bind(this)
         };
-}
+    }
     async deployFunction() {
         const all = await client.apis['apiextensions.k8s.io'].v1beta1.customresourcedefinitions.get();
 
-                for (let i in all['body']['items']) {
-                    let item = all['body']['items'][i];
-                    client.addCustomResourceDefinition(item);
-                }
+        for (let i in all['body']['items']) {
+            let item = all['body']['items'][i];
+            client.addCustomResourceDefinition(item);
+        }
         const env_name = this.options.env;
         const code = this.options.code;
-                const name = this.options.template;
+        const name = this.options.template;
         func.create_func_pkg(client, name, env_name, code);
 
     }

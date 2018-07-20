@@ -13,13 +13,16 @@
 'use strict';
 const Client = require('kubernetes-client').Client;
 const config = require('kubernetes-client').config;
-const client = new Client({ config: config.fromKubeconfig(), version: '1.9' });
+const client = new Client({
+    config: config.fromKubeconfig(),
+    version: '1.9'
+});
 let func = require('../common.js');
 class fissionInfo {
-    constructor(serverless,options) {
-    this.serverless = serverless;
-    this.options = options || {};
-    this.provider = this.serverless.getProvider('fission');
+    constructor(serverless, options) {
+        this.serverless = serverless;
+        this.options = options || {};
+        this.provider = this.serverless.getProvider('fission');
         this.commands = {
             info: {
                 lifecycleEvents: [
@@ -39,9 +42,9 @@ class fissionInfo {
                 }
             },
         };
-    this.hooks = {
-    'info:functions': this.infoFunction.bind(this)
-    }
+        this.hooks = {
+            'info:functions': this.infoFunction.bind(this)
+        }
 
     }
     async infoFunction() {
@@ -55,6 +58,6 @@ class fissionInfo {
         const fn_name = this.options.fn;
         func.fn_info(client, fn_name, nmspace);
 
-}
+    }
 }
 module.exports = fissionInfo;
