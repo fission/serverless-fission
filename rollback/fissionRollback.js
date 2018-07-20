@@ -47,12 +47,12 @@ class fissionRollback {
          const all = await client.apis['apiextensions.k8s.io'].v1beta1.customresourcedefinitions.get();
 
                 for (let i in all['body']['items']) {
-                    let item = all['body']['items'][i]
+                    let item = all['body']['items'][i];
                      client.addCustomResourceDefinition(item);
                 }
 	const env_name = this.options.env;
 	const nmspace = this.options.nmspace;
-	func.delete_env(client,env_name,nmspace);
+	func.delete_env(client, env_name, nmspace);
 	}
 }
 
