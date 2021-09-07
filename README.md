@@ -1,6 +1,8 @@
 
 # Fission Serverless Plugin
 
+Note: This plugin is out of maintainance, may not work out of box. Happy to receive contributions.
+
 This plugin brings [Fission](https://github.com/fission/fission) support within the [Serverless Framework](https://github.com/serverless).
 
 
