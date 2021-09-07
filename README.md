@@ -9,7 +9,7 @@ This plugin brings [Fission](https://github.com/fission/fission) support within 
 
 ## Pre requisites
 
-Make sure you have a fission running and fission-cli is installed. You can find the installation intructions [here](https://docs.fission.io/0.8.0/installation/installation/).
+Make sure you have a fission running and fission-cli is installed. You can find the installation intructions [here](https://docs.fission.io/docs/installation/).
 
 You can install serverless with npm,
 ```bash
@@ -20,7 +20,7 @@ $ npm install serverless -g
 
 Clone repo and check the example function
 ```bash
-$ git clone https://github.com/infracloudio/serverless-fission/
+$ git clone https://github.com/fission/serverless-fission/
 $ cd examples/python
 $ cat serverless.yml
 service: hello
